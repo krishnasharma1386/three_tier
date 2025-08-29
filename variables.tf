@@ -33,7 +33,7 @@ variable "master_username" {
 variable "master_password" {
   description = "Master DB password for Aurora"
   type        = string
-  default = "dbpassword"
-  sensitive   = true
+  # default = "dbpassword"
+  # sensitive   = true
 }
 

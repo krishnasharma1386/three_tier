@@ -12,8 +12,8 @@ module "ecs" {
   version = "~> 6.0"
   
 
-  cluster_name                   = local.aws_ecs.cluster_name
-  cluster_configuration          = local.aws_ecs.cluster_configuration
+  cluster_name = local.aws_ecs.cluster_name
+  cluster_configuration = local.aws_ecs.cluster_configuration
 
   create_cloudwatch_log_group            = local.aws_ecs.create_cloudwatch_log_group
   cloudwatch_log_group_name              = "/aws/ecs/${local.name_prefix}"
@@ -105,7 +105,7 @@ module "ecs" {
             "portMappings": [
               {
                 "name": "app",
-                "containerPort": 8080,
+                "containerPort": 80,
                 "protocol": "tcp"
               }
             ]
@@ -124,7 +124,7 @@ module "ecs" {
           namespace = aws_service_discovery_private_dns_namespace.be_ecs.arn
           service = [{
             client_alias = {
-              port = 8080
+              port = 80
               dns_name = "app"
             }
             port_name      = "app"
@@ -137,25 +137,19 @@ module "ecs" {
           service = {
             target_group_arn = element(module.private_alb.target_group_arns, 0)
             container_name   = "app"
-            container_port   = 8080
+            container_port   = 80
             port_name       = "app"
           }
         }
 
         subnet_ids      = module.vpc.private_subnets
         security_group_ingress_rules = {
-            private_alb = {
-            description                  = "Service port"
-            from_port                    = local.ports.app
-            ip_protocol                  = "tcp"
-            referenced_security_group_id = module.private_alb.security_group_id # module.ecs.services["web"].security_group_id
+            alb_3000 = {
+            description = "Service port"
+            from_port = local.ports.http
+            ip_protocol = "tcp"
+            referenced_security_group_id = module.public_alb_sg.security_group_id
             }
-            # ecs_web = {
-            # description                  = "Service port"
-            # from_port                    = local.ports.app
-            # ip_protocol                  = "tcp"
-            # referenced_security_group_id = module.ecs.services["web"].security_group_id
-            # }
         }
         security_group_egress_rules = {
             all = {
@@ -163,7 +157,6 @@ module "ecs" {
             cidr_ipv4   = "0.0.0.0/0"
             }
         }
-        # security_group_id = module.ecs_app_sg.security_group_id
       }
     }
  

@@ -30,12 +30,8 @@ module "private_alb_sg" {
   description = "Security group for Private ALB"
   vpc_id      = module.vpc.vpc_id
 
-  ingress_with_source_security_group_id = [
-    {
-      rule                     = "http-8080-tcp"
-      source_security_group_id = module.public_alb_sg.security_group_id
-    }
-  ]
+  ingress_rules       = ["http-80-tcp", "https-443-tcp"]
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 
   egress_rules       = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
@@ -43,6 +39,24 @@ module "private_alb_sg" {
   tags = local.aws_ecs.tags
 }
 
+
+# module "api_gateway_security_group" {
+#   source  = "terraform-aws-modules/security-group/aws"
+#   version = "~> 5.0"
+
+#   name        = "${local.name_prefix}-apigateway-sg"
+#   description = "API Gateway group for example usage"
+#   vpc_id      = module.vpc.vpc_id
+
+#   ingress_cidr_blocks = ["0.0.0.0/0"]
+#   ingress_rules       = ["http-80-tcp"]
+
+#   egress_rules = ["all-all"]
+
+#   tags = {
+#     name        = "${local.name_prefix}-apigateway-sg"
+#   }
+# }
 # # ECS Web Service SG
 # module "ecs_web_sg" {
 #   source  = "terraform-aws-modules/security-group/aws"

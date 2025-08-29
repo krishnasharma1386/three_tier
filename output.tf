@@ -32,3 +32,22 @@ output "db_instance_address" {
   value       = module.Postgresql_DB.db_instance_address
 }
 
+# output "api_id" {
+#   description = "The API identifier"
+#   value       = module.api_gateway.api_id
+# }
+
+# output "api_endpoint" {
+#   description = "URI of the API, of the form `https://{api-id}.execute-api.{region}.amazonaws.com` for HTTP APIs and `wss://{api-id}.execute-api.{region}.amazonaws.com` for WebSocket APIs"
+#   value       = module.api_gateway.api_endpoint
+# }
+
+# output "api_arn" {
+#   description = "The ARN of the API"
+#   value       = module.api_gateway.api_arn
+# }
+
+# output "api_execution_arn" {
+#   description = "The ARN prefix to be used in an `aws_lambda_permission`'s `source_arn` attribute or in an `aws_iam_policy` to authorize access to the `@connections` API"
+#   value       = module.api_gateway.api_execution_arn
+# }
