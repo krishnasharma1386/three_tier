@@ -37,7 +37,7 @@ module "public_alb" {
     }
   ]
 
-  tags = local.aws_ecs.tags
+  tags = local.common_tags
 }
 
 module "private_alb" {
@@ -78,7 +78,7 @@ module "private_alb" {
     }
   ]
 
-  tags = local.aws_ecs.tags
+  tags = local.common_tags
 }
 
 

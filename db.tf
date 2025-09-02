@@ -52,7 +52,5 @@ module "Postgresql_DB" {
   skip_final_snapshot     = true
   deletion_protection     = false
 
-  tags = {
-    name = "${local.name_prefix}-postgres-sql"
-  }
+  tags = local.common_tags
 }

@@ -72,7 +72,22 @@ locals {
   region      = var.aws_region
 }
 
+
 locals {
-  domain_name = "terraform-aws-modules.modules.tf" # trimsuffix(data.aws_route53_zone.this.name, ".")
-  subdomain   = "cdn"
+  common_tags = {
+    Environment = var.environment != "" ? var.environment : "dev"
+    Project     = var.project_name != "" ? var.project_name : "my-project"
+    Owner       = var.owner != "" ? var.owner : "krishna.sharma"
+    ManagedBy   = "Terraform"
+    CreatedOn   = timestamp()
+  }
+}
+
+
+locals {
+  # statically defined map keys representing services
+  service_keys = {
+    service1 = "web"
+    service2 = "app"
+  }
 }

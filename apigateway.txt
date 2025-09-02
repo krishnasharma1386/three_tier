@@ -1,0 +1,35 @@
+module "api_gateway" {
+  source = "terraform-aws-modules/apigateway-v2/aws"
+
+  name          = "dev-http"
+  description   = "My awesome HTTP API Gateway"
+  protocol_type = "HTTP"
+  create_domain_name = false
+  cors_configuration = {
+    allow_headers = ["content-type", "x-amz-date", "authorization", "x-api-key", "x-amz-security-token", "x-amz-user-agent"]
+    allow_methods = ["*"]
+    allow_origins = ["*"]
+  }
+  routes = {
+    
+    "GET /" = {
+      integration = {
+        connection_type = "VPC_LINK"
+        uri             = element(module.public_alb.target_group_arns, 0) # module.private_alb.listeners["default"].arn
+        type            = "HTTP_PROXY"
+        method          = "ANY"
+        vpc_link_key    = "my-vpc"
+      }
+    }
+  }
+  vpc_links = {
+    my-vpc = {
+      name               = "${local.name_prefix}-vpc-link"
+      security_group_ids = [module.api_gateway_security_group.security_group_id]
+      subnet_ids         = module.vpc.private_subnets
+    }
+  }
+  tags = {
+    name = "${local.name_prefix}-vpc-link"
+    }
+}

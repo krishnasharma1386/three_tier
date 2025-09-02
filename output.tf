@@ -14,6 +14,10 @@ output "ecs_cluster_id" {
   value = module.ecs.cluster_id
 }
 
+output "ecs_service" {
+  value = module.ecs.services
+}
+
 output "service_discovery_namespace" {
   value = aws_service_discovery_private_dns_namespace.be_ecs.name
 }
@@ -31,7 +35,12 @@ output "db_instance_address" {
   description = "The address of the RDS instance"
   value       = module.Postgresql_DB.db_instance_address
 }
-
+output "sns_alerts_id" {
+  value = module.sns_alerts.topic_id
+}
+output "sns_alerts_arn" {
+  value = module.sns_alerts.topic_arn
+}
 # output "api_id" {
 #   description = "The API identifier"
 #   value       = module.api_gateway.api_id

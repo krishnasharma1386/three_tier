@@ -3,7 +3,7 @@ resource "aws_service_discovery_private_dns_namespace" "be_ecs" {
   name        = "${local.name_prefix}.local"
   description = "Private DNS namespace for ${local.name_prefix}"
   vpc         = module.vpc.vpc_id
-  tags        = local.aws_ecs.tags
+  tags        = local.common_tags
 }
 
 
@@ -26,6 +26,7 @@ module "ecs" {
       web = {
         cpu    = 256
         memory = 512
+        enable_execute_command = true
 
         container_definitions = {
           web = {
@@ -94,6 +95,8 @@ module "ecs" {
       app = {
         cpu    = 256
         memory = 512
+        enable_execute_command = true
+
 
         container_definitions = {
           app = {
@@ -161,6 +164,6 @@ module "ecs" {
     }
  
 
-  tags = local.aws_ecs.tags
+  tags = local.common_tags
 }
 
